@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          String    @default("applicant") // applicant or recruiter
+  googleId      String?   @unique
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  candidates    Candidate[]
+}
+
+model Job {
+  id          String      @id @default(cuid())
+  title       String
+  description String      @db.Text
+  details     String?     @db.Text
+  skills      String[]
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  candidates  Candidate[]
+}
+
+model Candidate {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId       String
+  job         Job         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name        String
+  email       String
+  whyFit      String      @db.Text
+  portfolio   String?
+  linkedin    String?
+  github      String?
+  contact     String
+  resumeUrl   String
+  resumeText  String?     @db.Text
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  aiInsights  AIInsight[]
+  
+  @@unique([userId, jobId])
+}
+
+model AIInsight {
+  id          String    @id @default(cuid())
+  candidateId String
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  jobJD       String    @db.Text
+  resumeText  String    @db.Text
+  score       Int
+  insights    String[]
+  createdAt   DateTime  @default(now())
+}
