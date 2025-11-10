@@ -38,20 +38,31 @@ export default async function AdminJobsPage() {
           <Card key={job.id}>
             <CardHeader>
               <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-xl">{job.title}</CardTitle>
+                <div className="flex-1">
+                  <Link href={`/admin/jobs/${job.id}/candidates`}>
+                    <CardTitle className="text-xl hover:text-gray-600 cursor-pointer">
+                      {job.title}
+                    </CardTitle>
+                  </Link>
                   <div className="flex gap-2 mt-2">
                     <Badge variant={job.isActive ? "default" : "secondary"}>
                       {job.isActive ? "Active" : "Inactive"}
                     </Badge>
-                    <Badge variant="outline">
-                      {job._count.candidates} applicants
-                    </Badge>
+                    <Link href={`/admin/jobs/${job.id}/candidates`}>
+                      <Badge variant="outline" className="cursor-pointer hover:bg-gray-100">
+                        {job._count.candidates} applicants
+                      </Badge>
+                    </Link>
                   </div>
                 </div>
-                <Link href={`/admin/jobs/${job.id}/edit`}>
-                  <Button variant="outline" size="sm">Edit</Button>
-                </Link>
+                <div className="flex flex-col gap-2">
+                  <Link href={`/admin/jobs/${job.id}/edit`}>
+                    <Button variant="outline" size="sm" className="w-full">Edit</Button>
+                  </Link>
+                  <Link href={`/admin/jobs/${job.id}/candidates`}>
+                    <Button variant="outline" size="sm" className="w-full">View Applicants</Button>
+                  </Link>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
