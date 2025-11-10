@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth"
+import { auth, signOut } from "@/lib/auth"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -29,8 +29,16 @@ export default async function AdminLayout({
               </Link>
             </nav>
           </div>
-          <div className="text-sm text-gray-600">
-            {session.user.email}
+          <div className="flex gap-4 items-center">
+            <span className="text-sm text-gray-600">{session.user.email}</span>
+            <form
+              action={async () => {
+                "use server"
+                await signOut({ redirectTo: "/" })
+              }}
+            >
+              <Button variant="ghost" type="submit">Logout</Button>
+            </form>
           </div>
         </div>
       </header>

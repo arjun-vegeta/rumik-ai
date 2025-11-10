@@ -9,7 +9,15 @@ export default async function AdminJobsPage() {
     orderBy: { createdAt: 'desc' },
     include: {
       _count: {
-        select: { candidates: true }
+        select: { 
+          candidates: {
+            where: {
+              status: {
+                not: "withdrawn"
+              }
+            }
+          }
+        }
       }
     }
   })

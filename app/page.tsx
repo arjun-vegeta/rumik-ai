@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma"
-import { auth } from "@/lib/auth"
+import { auth, signOut } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -54,11 +54,23 @@ export default async function CareersPage() {
             {session?.user ? (
               <>
                 <span className="text-sm text-gray-600">{session.user.email}</span>
-                {session.user.role === 'recruiter' && (
+                {session.user.role === 'recruiter' ? (
                   <Link href="/admin">
                     <Button variant="outline">Admin Dashboard</Button>
                   </Link>
+                ) : (
+                  <Link href="/applications">
+                    <Button variant="outline">My Applications</Button>
+                  </Link>
                 )}
+                <form
+                  action={async () => {
+                    "use server"
+                    await signOut({ redirectTo: "/" })
+                  }}
+                >
+                  <Button variant="ghost" type="submit">Logout</Button>
+                </form>
               </>
             ) : (
               <Link href="/auth/signin">

@@ -6,6 +6,11 @@ import Link from "next/link"
 
 export default async function CandidatesPage() {
   const candidates = await prisma.candidate.findMany({
+    where: {
+      status: {
+        not: "withdrawn"
+      }
+    },
     orderBy: { createdAt: 'desc' },
     include: {
       job: true,

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import AIInsightButton from "@/components/AIInsightButton"
+import StatusUpdateButton from "@/components/StatusUpdateButton"
 
 export default async function CandidateDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -35,12 +36,20 @@ export default async function CandidateDetailPage({ params }: { params: Promise<
       <div className="grid gap-6 mt-6">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">{candidate.name}</CardTitle>
-            <div className="flex gap-2 mt-2">
-              <Badge variant="outline">{candidate.job.title}</Badge>
-              <Badge variant="secondary">
-                Applied {new Date(candidate.createdAt).toLocaleDateString()}
-              </Badge>
+            <div className="flex justify-between items-start">
+              <div>
+                <CardTitle className="text-2xl">{candidate.name}</CardTitle>
+                <div className="flex gap-2 mt-2">
+                  <Badge variant="outline">{candidate.job.title}</Badge>
+                  <Badge variant="secondary">
+                    Applied {new Date(candidate.createdAt).toLocaleDateString()}
+                  </Badge>
+                </div>
+              </div>
+              <StatusUpdateButton 
+                candidateId={candidate.id}
+                currentStatus={candidate.status}
+              />
             </div>
           </CardHeader>
           <CardContent className="space-y-4">

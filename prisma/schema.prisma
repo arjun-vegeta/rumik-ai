@@ -52,6 +52,7 @@ model Candidate {
   contact     String
   resumeUrl   String
   resumeText  String?     @db.Text
+  status      String      @default("submitted") // submitted, in_review, selected, rejected, withdrawn
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   aiInsights  AIInsight[]
