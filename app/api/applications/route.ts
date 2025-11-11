@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { writeFile, mkdir } from "fs/promises"
-import { join } from "path"
-import { existsSync } from "fs"
+import { uploadResume } from "@/lib/supabase"
 import { sendApplicationConfirmation } from "@/lib/email"
 
 export async function POST(req: NextRequest) {
@@ -34,19 +32,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Job not found" }, { status: 404 })
     }
 
-    // Save resume file
-    const bytes = await resume.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    // Generate temporary candidate ID for file naming
+    const tempCandidateId = `${Date.now()}-${Math.random().toString(36).substring(7)}`
     
-    const uploadsDir = join(process.cwd(), "public", "uploads", "resumes")
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
-    }
-
-    const filename = `${Date.now()}-${resume.name}`
-    const filepath = join(uploadsDir, filename)
-    await writeFile(filepath, buffer)
-    const resumeUrl = `/uploads/resumes/${filename}`
+    // Upload resume to Supabase Storage
+    const resumeUrl = await uploadResume(resume, tempCandidateId)
 
     // Create candidate
     const candidate = await prisma.candidate.create({
