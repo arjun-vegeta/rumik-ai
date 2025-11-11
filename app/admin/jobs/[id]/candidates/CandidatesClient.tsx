@@ -211,7 +211,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                         <Button
                           size="sm"
                           onClick={() => toggleExpand(candidate.id)}
-                          className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-gray-800"
+                          className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
                         >
                           Details
                           {expandedId === candidate.id ? (
@@ -330,7 +330,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                                     </div>
                                     <Button
                                       onClick={() => generateAIInsights(candidate.id)}
-                                      className="bg-black text-[#fce4bd] hover:bg-gray-800"
+                                      className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
                                     >
                                       <Sparkles className="mr-2" size={16} />
                                       Generate Insights

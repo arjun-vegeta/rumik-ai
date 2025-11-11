@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { signIn } from "@/lib/auth"
 import Navbar from "@/components/Navbar"
+import Image from "next/image"
 
 export default async function SignInPage({
   searchParams,
@@ -31,8 +32,9 @@ export default async function SignInPage({
           >
             <Button 
               type="submit"
-              className="w-full bg-black text-[#FFF4B3] hover:bg-gray-800"
+              className="w-full bg-black text-[#FFF4B3] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-6"
             >
+              <Image src="/google.svg" alt="Google" width={20} height={20} />
               Sign in with Google
             </Button>
           </form>

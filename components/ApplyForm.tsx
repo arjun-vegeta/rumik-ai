@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { signIn } from "next-auth/react"
 import { Upload } from "lucide-react"
+import Image from "next/image"
 
 interface ApplyFormProps {
   job: {
@@ -53,12 +54,15 @@ export default function ApplyForm({ job, session }: ApplyFormProps) {
     return (
       <div className="bg-gray-50 p-8 rounded-lg text-center">
         <p className="mb-4 text-gray-700">Please sign in with Google to apply</p>
-        <Button 
-          onClick={() => signIn("google")}
-          className="bg-black text-[#FFF4B3] hover:bg-gray-800"
-        >
-          Sign in with Google
-        </Button>
+        <div className="flex justify-center">
+          <Button 
+            onClick={() => signIn("google")}
+            className="bg-black text-[#FFF4B3] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black flex items-center justify-center gap-2 py-6"
+          >
+            <Image src="/google.svg" alt="Google" width={20} height={20} />
+            Sign in with Google
+          </Button>
+        </div>
       </div>
     )
   }

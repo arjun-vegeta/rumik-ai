@@ -12,8 +12,13 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Careers - Join Our Team",
+  title: "Careers @rumik.ai",
   description: "Explore career opportunities and join our team",
+  icons: {
+    icon: '/3d_logo.webp',
+    shortcut: '/3d_logo.webp',
+    apple: '/3d_logo.webp',
+  },
 };
 
 export default function RootLayout({
@@ -23,6 +28,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={manrope.className}>
+      <head>
+        <link rel="icon" href="/3d_logo.webp" type="image/webp" />
+        <link rel="shortcut icon" href="/3d_logo.webp" type="image/webp" />
+        <link rel="apple-touch-icon" href="/3d_logo.webp" />
+      </head>
       <body className="antialiased">
         <NavigationProgress />
         {children}

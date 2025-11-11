@@ -22,6 +22,8 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -38,6 +40,26 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
     };
   }, [dropdownOpen]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Show navbar when scrolling up or at the top
+      if (currentScrollY < lastScrollY || currentScrollY < 10) {
+        setIsVisible(true);
+      } 
+      // Hide navbar when scrolling down and past 100px
+      else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setIsVisible(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
     startTransition(() => {
@@ -52,8 +74,9 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   };
 
   return (
-    <header className="bg-[#FCFAF7] max-w-7xl mx-auto px-8 py-8 flex items-center justify-between">
-      <Link 
+    <header className={`bg-[#FCFAF7] w-full sticky top-0 z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <div className="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
+        <Link 
         href="/" 
         onClick={handleLogoClick}
         className="w-60 h-12 relative cursor-pointer block"
@@ -105,7 +128,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-4 py-2 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
             >
               {getUserDisplayName()}
               <ChevronDown size={18} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
@@ -144,7 +167,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
                       window.location.href = `/api/auth/signout?callbackUrl=${encodeURIComponent(currentPath)}`;
                     }
                   }}
-                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100 mt-2 pt-2"
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100 mt-2 pt-2 cursor-pointer"
                 >
                   Logout
                 </button>
@@ -160,7 +183,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
                 window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
               }
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
+            className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-4 py-2 text-base font-semibold shadow hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 cursor-pointer border-2 border-black"
             aria-label="Login"
           >
             Login <ArrowRight size={18} />
@@ -169,6 +192,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
           // Show placeholder during SSR to match initial state
           <div className="w-[120px] h-12" />
         )}
+      </div>
       </div>
     </header>
   );

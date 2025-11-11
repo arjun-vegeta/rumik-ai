@@ -48,7 +48,7 @@ function HoverCursor() {
             boxShadow: "0 6px 18px rgba(0,0,0,0.25)",
           }}
         >
-          <ArrowRight size={20} color="#fff" />
+          <ArrowRight size={20} color="#fce4bd" />
         </div>
       </div>
 
@@ -127,8 +127,8 @@ export default function HomePage() {
 
           <div className="mt-8">
             <a
-              href="#roles"
-              className="inline-flex items-center gap-2 text-lg bg-black text-[#fce4bd] px-8 py-4 rounded-full font-medium shadow-lg"
+              href="/roles"
+              className="inline-flex items-center gap-2 text-lg bg-black text-[#fce4bd] px-8 py-4 rounded-full font-medium shadow-lg hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
             >
               Explore Available Roles <ArrowUpRight size={20} />
             </a>
