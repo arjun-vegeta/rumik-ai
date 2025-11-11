@@ -13,9 +13,10 @@ interface User {
 
 interface NavbarClientProps {
   user: User | null;
+  isHydrated: boolean;
 }
 
-export default function NavbarClient({ user }: NavbarClientProps) {
+export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -42,15 +43,26 @@ export default function NavbarClient({ user }: NavbarClientProps) {
 
   return (
     <header className="bg-[#FCFAF7] max-w-7xl mx-auto px-8 py-8 flex items-center justify-between">
-      <Link href="/" prefetch={true} className="w-60 h-12 relative cursor-pointer">
-        <Image src="/careers_logo.webp" alt="rumik.ai" fill style={{ objectFit: "contain" }} priority />
+      <Link 
+        href="/" 
+        prefetch={true} 
+        className="w-60 h-12 relative cursor-pointer block"
+      >
+        <Image 
+          src="/careers_logo.webp" 
+          alt="rumik.ai" 
+          fill 
+          style={{ objectFit: "contain" }} 
+          priority 
+          quality={90}
+        />
       </Link>
 
       <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
-        <Link className="hover:underline" href="/roles">
+        <Link className="hover:underline" href="/roles" prefetch={true}>
           Roles
         </Link>
-        <Link className="hover:underline" href="/#benefits">
+        <Link className="hover:underline" href="/#benefits" scroll={true}>
           Benefits
         </Link>
         <a className="hover:underline" href="https://rumik.ai/blogs" target="_blank" rel="noopener noreferrer">
@@ -62,7 +74,7 @@ export default function NavbarClient({ user }: NavbarClientProps) {
       </nav>
 
       <div className="flex items-center gap-4">
-        {user ? (
+        {isHydrated && user ? (
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -112,7 +124,7 @@ export default function NavbarClient({ user }: NavbarClientProps) {
               </div>
             )}
           </div>
-        ) : (
+        ) : isHydrated ? (
           <a
             href="/auth/signin"
             onClick={(e) => {
@@ -126,6 +138,9 @@ export default function NavbarClient({ user }: NavbarClientProps) {
           >
             Login <ArrowRight size={18} />
           </a>
+        ) : (
+          // Show placeholder during SSR to match initial state
+          <div className="w-[120px] h-[48px]" />
         )}
       </div>
     </header>

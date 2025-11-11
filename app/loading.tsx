@@ -1,10 +1,12 @@
+import Navbar from "@/components/Navbar";
+
 export default function Loading() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto mb-4"></div>
-        <p className="text-gray-600">Loading...</p>
+    <main className="bg-[#FCFAF7] text-black min-h-screen">
+      <Navbar />
+      <div className="flex justify-center items-center h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-black"></div>
       </div>
-    </div>
-  )
+    </main>
+  );
 }
