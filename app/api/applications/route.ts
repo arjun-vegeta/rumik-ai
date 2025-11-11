@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
       },
     })
 
-    // Send confirmation email (non-blocking)
-    sendApplicationConfirmation({
+    // Send confirmation email
+    await sendApplicationConfirmation({
       candidateName: name,
       candidateEmail: email,
       jobTitle: job.title,
