@@ -249,18 +249,36 @@ export default function HomePage() {
       <footer className="mt-16 bg-black text-[#EDEDED]">
         <div className="max-w-7xl mx-auto px-6 pt-20 pb-32 grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="flex flex-col gap-2">
-            <p className="text-lg">Twitter</p>
-            <p className="text-lg">Linkedin</p>
-            <p className="text-lg">Instagram</p>
+            <a href="https://twitter.com/rumik_ai" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Twitter
+            </a>
+            <a href="https://www.linkedin.com/company/rumik/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              LinkedIn
+            </a>
+            <a href="https://www.instagram.com/ira.rumik/" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Instagram
+            </a>
           </div>
 
           <div className="flex flex-col gap-2 items-start">
-            <a className="text-lg">Home</a>
-            <a className="text-lg">Career</a>
-            <a className="text-lg">Contact</a>
-            <a className="text-lg">Privacy Policy</a>
-            <a className="text-lg">Terms</a>
-            <a className="text-lg">Support</a>
+            <a href="https://rumik.ai/" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Home
+            </a>
+            <a href="/" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Careers
+            </a>
+            <a href="https://rumik.ai/contact" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Contact
+            </a>
+            <a href="https://rumik.ai/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Privacy Policy
+            </a>
+            <a href="https://rumik.ai/terms" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Terms
+            </a>
+            <a href="https://rumik.ai/support" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">
+              Support
+            </a>
           </div>
 
           <div className="flex items-end justify-end">

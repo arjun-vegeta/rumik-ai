@@ -78,16 +78,16 @@ export default function JobForm({ job }: JobFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
-      <div className="space-y-2">
-        <Label htmlFor="title">Job Title *</Label>
-        <Input id="title" name="title" required defaultValue={job?.title} className="bg-white" />
+    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 max-w-2xl">
+      <div className="space-y-1.5 md:space-y-2">
+        <Label htmlFor="title" className="text-sm md:text-base">Job Title *</Label>
+        <Input id="title" name="title" required defaultValue={job?.title} className="bg-white text-sm md:text-base" />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="jobType">Job Type *</Label>
+      <div className="space-y-1.5 md:space-y-2">
+        <Label htmlFor="jobType" className="text-sm md:text-base">Job Type *</Label>
         <Select value={jobType} onValueChange={setJobType}>
-          <SelectTrigger className="bg-white">
+          <SelectTrigger className="bg-white text-sm md:text-base">
             <SelectValue placeholder="Select job type" />
           </SelectTrigger>
           <SelectContent>
@@ -98,31 +98,31 @@ export default function JobForm({ job }: JobFormProps) {
         </Select>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="description">Job Description *</Label>
+      <div className="space-y-1.5 md:space-y-2">
+        <Label htmlFor="description" className="text-sm md:text-base">Job Description *</Label>
         <Textarea 
           id="description" 
           name="description" 
           required 
           rows={6}
           defaultValue={job?.description}
-          className="bg-white"
+          className="bg-white text-sm md:text-base"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="details">Additional Details</Label>
+      <div className="space-y-1.5 md:space-y-2">
+        <Label htmlFor="details" className="text-sm md:text-base">Additional Details</Label>
         <Textarea 
           id="details" 
           name="details" 
           rows={4}
           defaultValue={job?.details || ""}
-          className="bg-white"
+          className="bg-white text-sm md:text-base"
         />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="skills">Skills</Label>
+      <div className="space-y-1.5 md:space-y-2">
+        <Label htmlFor="skills" className="text-sm md:text-base">Skills</Label>
         <div className="flex gap-2 mb-2">
           <Input 
             id="skills"
@@ -130,9 +130,9 @@ export default function JobForm({ job }: JobFormProps) {
             onChange={(e) => setSkillInput(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addSkill())}
             placeholder="Add a skill..."
-            className="bg-white"
+            className="bg-white text-sm md:text-base"
           />
-          <Button type="button" onClick={addSkill} variant="outline">
+          <Button type="button" onClick={addSkill} variant="outline" className="text-sm md:text-base">
             Add
           </Button>
         </div>
@@ -160,20 +160,20 @@ export default function JobForm({ job }: JobFormProps) {
           defaultChecked={job?.isActive ?? true}
           className="w-4 h-4"
         />
-        <Label htmlFor="isActive">Active (visible to applicants)</Label>
+        <Label htmlFor="isActive" className="text-sm md:text-base">Active (visible to applicants)</Label>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-700 p-4 rounded">
+        <div className="bg-red-50 text-red-700 p-3 md:p-4 rounded text-sm md:text-base">
           {error}
         </div>
       )}
 
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         <Button 
           type="submit" 
           disabled={loading}
-          className="bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black"
+          className="w-full sm:w-auto bg-black text-[#fce4bd] hover:bg-[#fce4bd] hover:border-2 hover:border-black hover:text-black transition-all duration-300 border-2 border-black text-sm md:text-base"
         >
           {loading ? "Saving..." : job ? "Update Job" : "Create Job"}
         </Button>
@@ -181,6 +181,7 @@ export default function JobForm({ job }: JobFormProps) {
           type="button" 
           variant="outline"
           onClick={() => router.back()}
+          className="w-full sm:w-auto text-sm md:text-base"
         >
           Cancel
         </Button>
