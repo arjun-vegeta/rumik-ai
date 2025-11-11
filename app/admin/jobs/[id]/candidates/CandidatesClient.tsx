@@ -3,9 +3,14 @@
 import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Sparkles, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+
+interface AIInsight {
+  score: number;
+  insights: string[];
+}
 
 interface Candidate {
   id: string;
@@ -19,6 +24,7 @@ interface Candidate {
   resumeUrl: string;
   status: string;
   createdAt: Date;
+  aiInsights: AIInsight[];
 }
 
 interface CandidatesClientProps {
@@ -31,6 +37,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [candidates, setCandidates] = useState(initialCandidates);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
+  const [generatingInsights, setGeneratingInsights] = useState<string | null>(null);
 
   const filteredCandidates = candidates.filter((candidate) =>
     searchQuery === "" ||
@@ -79,6 +86,32 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
       alert("Failed to update status");
     } finally {
       setUpdatingStatus(null);
+    }
+  };
+
+  const generateAIInsights = async (candidateId: string) => {
+    setGeneratingInsights(candidateId);
+    try {
+      const res = await fetch(`/api/candidates/${candidateId}/ai-insights`, {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to generate AI insights");
+      }
+
+      setCandidates(candidates.map(c => 
+        c.id === candidateId ? { ...c, aiInsights: [data] } : c
+      ));
+      
+      router.refresh();
+    } catch (error: any) {
+      console.error("Error generating AI insights:", error);
+      alert(`Failed to generate AI insights: ${error.message}`);
+    } finally {
+      setGeneratingInsights(null);
     }
   };
 
@@ -193,54 +226,120 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                   {expandedId === candidate.id && (
                     <tr>
                       <td colSpan={6} className="px-6 py-6 bg-gray-50">
-                        <div className="space-y-4">
-                          <div>
-                            <h4 className="text-sm font-semibold text-gray-900 mb-2">Contact Information</h4>
-                            <p className="text-sm text-gray-700">Phone: {candidate.contact}</p>
-                          </div>
-
-                          <div>
-                            <h4 className="text-sm font-semibold text-gray-900 mb-2">Why This Role?</h4>
-                            <p className="text-sm text-gray-700 whitespace-pre-wrap">{candidate.whyFit}</p>
-                          </div>
-
-                          {(candidate.portfolio || candidate.linkedin || candidate.github) && (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          {/* Left Column - Candidate Info */}
+                          <div className="space-y-4">
                             <div>
-                              <h4 className="text-sm font-semibold text-gray-900 mb-2">Links</h4>
-                              <div className="flex gap-4 text-sm">
-                                {candidate.portfolio && (
-                                  <a
-                                    href={candidate.portfolio}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                  >
-                                    Portfolio ↗
-                                  </a>
-                                )}
-                                {candidate.linkedin && (
-                                  <a
-                                    href={candidate.linkedin}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                  >
-                                    LinkedIn ↗
-                                  </a>
-                                )}
-                                {candidate.github && (
-                                  <a
-                                    href={candidate.github}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-600 hover:underline"
-                                  >
-                                    GitHub ↗
-                                  </a>
+                              <h4 className="text-sm font-semibold text-gray-900 mb-2">Contact Information</h4>
+                              <p className="text-sm text-gray-700">Phone: {candidate.contact}</p>
+                            </div>
+
+                            <div>
+                              <h4 className="text-sm font-semibold text-gray-900 mb-2">Why This Role?</h4>
+                              <p className="text-sm text-gray-700 whitespace-pre-wrap">{candidate.whyFit}</p>
+                            </div>
+
+                            {(candidate.portfolio || candidate.linkedin || candidate.github) && (
+                              <div>
+                                <h4 className="text-sm font-semibold text-gray-900 mb-2">Links</h4>
+                                <div className="flex gap-4 text-sm">
+                                  {candidate.portfolio && (
+                                    <a
+                                      href={candidate.portfolio}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:underline"
+                                    >
+                                      Portfolio ↗
+                                    </a>
+                                  )}
+                                  {candidate.linkedin && (
+                                    <a
+                                      href={candidate.linkedin}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:underline"
+                                    >
+                                      LinkedIn ↗
+                                    </a>
+                                  )}
+                                  {candidate.github && (
+                                    <a
+                                      href={candidate.github}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:underline"
+                                    >
+                                      GitHub ↗
+                                    </a>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Right Column - AI Insights */}
+                          <div className="bg-white rounded-lg p-5 border border-gray-200">
+                            {candidate.aiInsights && candidate.aiInsights.length > 0 ? (
+                              <div className="space-y-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                  <Sparkles className="text-[#F5E69A]" size={18} />
+                                  <h4 className="text-sm font-semibold text-gray-900">AI Insights</h4>
+                                </div>
+
+                                <div className="flex items-center gap-4 pb-4 border-b border-gray-200">
+                                  <div className="text-4xl font-bold text-gray-900">
+                                    {candidate.aiInsights[0].score}
+                                  </div>
+                                  <div className="flex-1">
+                                    <div className="text-sm font-medium text-gray-700 mb-2">Match Score</div>
+                                    <div className="w-full bg-gray-200 rounded-full h-2">
+                                      <div
+                                        className="bg-black h-2 rounded-full transition-all"
+                                        style={{ width: `${candidate.aiInsights[0].score}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="space-y-3 mt-4">
+                                  <div className="text-xs font-semibold text-gray-700 uppercase">Key Insights</div>
+                                  {candidate.aiInsights[0].insights.map((insight, idx) => (
+                                    <div key={idx} className="flex gap-3">
+                                      <span className="shrink-0 w-6 h-6 rounded-full bg-black text-[#F5E69A] text-xs font-bold flex items-center justify-center mt-0.5">
+                                        {idx + 1}
+                                      </span>
+                                      <span className="text-sm text-gray-700 leading-relaxed">{insight}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="text-center py-8">
+                                {generatingInsights === candidate.id ? (
+                                  <div className="flex flex-col items-center gap-3">
+                                    <Loader2 className="animate-spin text-gray-900" size={32} />
+                                    <p className="text-sm text-gray-700 font-medium">Analyzing candidate...</p>
+                                  </div>
+                                ) : (
+                                  <div className="flex flex-col items-center gap-4">
+                                    <Sparkles className="text-gray-400" size={32} />
+                                    <div>
+                                      <h5 className="text-sm font-semibold text-gray-900 mb-1">AI Analysis</h5>
+                                      <p className="text-xs text-gray-600 mb-4">Get insights on candidate fit</p>
+                                    </div>
+                                    <Button
+                                      onClick={() => generateAIInsights(candidate.id)}
+                                      className="bg-black text-[#F5E69A] hover:bg-gray-800"
+                                    >
+                                      <Sparkles className="mr-2" size={16} />
+                                      Generate Insights
+                                    </Button>
+                                  </div>
                                 )}
                               </div>
-                            </div>
-                          )}
+                            )}
+                          </div>
                         </div>
                       </td>
                     </tr>

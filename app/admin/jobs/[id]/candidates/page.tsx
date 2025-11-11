@@ -29,6 +29,13 @@ export default async function JobCandidatesPage({ params }: { params: Promise<{ 
           resumeUrl: true,
           status: true,
           createdAt: true,
+          aiInsights: {
+            select: {
+              score: true,
+              insights: true,
+            },
+            take: 1,
+          },
         },
       },
     },

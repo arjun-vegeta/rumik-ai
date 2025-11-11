@@ -27,6 +27,13 @@ export default async function CandidatesPage() {
             title: true,
           },
         },
+        aiInsights: {
+          select: {
+            score: true,
+            insights: true,
+          },
+          take: 1,
+        },
       },
     }),
     prisma.job.findMany({
