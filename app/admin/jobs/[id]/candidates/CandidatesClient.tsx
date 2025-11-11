@@ -211,7 +211,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                         <Button
                           size="sm"
                           onClick={() => toggleExpand(candidate.id)}
-                          className="flex items-center gap-1 bg-black text-[#F5E69A] hover:bg-gray-800"
+                          className="flex items-center gap-1 bg-black text-[#fce4bd] hover:bg-gray-800"
                         >
                           Details
                           {expandedId === candidate.id ? (
@@ -283,7 +283,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                             {candidate.aiInsights && candidate.aiInsights.length > 0 ? (
                               <div className="space-y-4">
                                 <div className="flex items-center gap-2 mb-3">
-                                  <Sparkles className="text-[#F5E69A]" size={18} />
+                                  <Sparkles className="text-[#fce4bd]" size={18} />
                                   <h4 className="text-sm font-semibold text-gray-900">AI Insights</h4>
                                 </div>
 
@@ -306,7 +306,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                                   <div className="text-xs font-semibold text-gray-700 uppercase">Key Insights</div>
                                   {candidate.aiInsights[0].insights.map((insight, idx) => (
                                     <div key={idx} className="flex gap-3">
-                                      <span className="shrink-0 w-6 h-6 rounded-full bg-black text-[#F5E69A] text-xs font-bold flex items-center justify-center mt-0.5">
+                                      <span className="shrink-0 w-6 h-6 rounded-full bg-black text-[#fce4bd] text-xs font-bold flex items-center justify-center mt-0.5">
                                         {idx + 1}
                                       </span>
                                       <span className="text-sm text-gray-700 leading-relaxed">{insight}</span>
@@ -330,7 +330,7 @@ export default function CandidatesClient({ candidates: initialCandidates }: Cand
                                     </div>
                                     <Button
                                       onClick={() => generateAIInsights(candidate.id)}
-                                      className="bg-black text-[#F5E69A] hover:bg-gray-800"
+                                      className="bg-black text-[#fce4bd] hover:bg-gray-800"
                                     >
                                       <Sparkles className="mr-2" size={16} />
                                       Generate Insights

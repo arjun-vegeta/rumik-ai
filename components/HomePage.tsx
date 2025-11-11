@@ -1,10 +1,9 @@
 "use client"
 
 import Image from "next/image";
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import BenefitLine from "@/components/BenefitLine";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
-import { WorldMap } from "@/components/ui/world-map";
 
 function HoverCursor() {
   // simple component to render a custom circle cursor with an arrow SVG
@@ -99,6 +98,19 @@ function RoleLink({ children, href }: { children: React.ReactNode; href: string 
 }
 
 export default function HomePage() {
+  // Handle hash navigation on page load
+  React.useEffect(() => {
+    const hash = window.location.hash;
+    if (hash === '#benefits') {
+      setTimeout(() => {
+        const benefitsSection = document.getElementById('benefits');
+        if (benefitsSection) {
+          benefitsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, []);
+
   return (
     <>
       <HoverCursor />
@@ -116,7 +128,7 @@ export default function HomePage() {
           <div className="mt-8">
             <a
               href="#roles"
-              className="inline-flex items-center gap-2 text-lg bg-black text-[#F3E6D2] px-8 py-4 rounded-full font-medium shadow-lg"
+              className="inline-flex items-center gap-2 text-lg bg-black text-[#fce4bd] px-8 py-4 rounded-full font-medium shadow-lg"
             >
               Explore Available Roles <ArrowUpRight size={20} />
             </a>
@@ -125,47 +137,14 @@ export default function HomePage() {
 
         {/* world map on the right */}
         <div className="w-full md:w-1/2 flex items-center justify-center">
-          <div className="w-full">
-            <Suspense fallback={<div className="w-full aspect-2/1 bg-[#FCFAF7] rounded-lg" />}>
-              <WorldMap 
-                dots={[
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India (center)
-                    end: { lat: 37.7749, lng: -122.4194 }, // San Francisco
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: 51.5074, lng: -0.1278 }, // London
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: 40.7128, lng: -74.0060 }, // New York
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: 35.6762, lng: 139.6503 }, // Tokyo
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: 1.3521, lng: 103.8198 }, // Singapore
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: -43.8688, lng: 151.2093 }, // Sydney
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: -23.5505, lng: -46.6333 }, // São Paulo, Brazil
-                  },
-                  {
-                    start: { lat: 6.5937, lng: 78.9629 }, // India
-                    end: { lat: -1.2921, lng: 36.8219 }, // Nairobi, Kenya
-                  },
-                ]}
-                lineColor="#000000"
-              />
-            </Suspense>
-          </div>
+          <Image 
+            src="/map.webp" 
+            alt="World Map" 
+            width={800}
+            height={600}
+            className="w-full h-auto"
+            priority
+          />
         </div>
       </section>
 
@@ -225,19 +204,19 @@ export default function HomePage() {
       </section>
 
       {/* Benefits big centered list (each line single, bigger) */}
-      <section className="max-w-7xl mx-auto px-6 text-center md:py-24 py-12">
+      <section id="benefits" className="max-w-7xl mx-auto px-6 text-center md:py-24 py-12">
         <p className="text-[28px] md:text-[34px] text-black ">benfits: <span className="text-gray-500">we solved the actual problem.</span></p>
 
         <div className="mt-16 space-y-6">
-          <BenefitLine text="housing:" highlightText="we pay your rent." image="/benefits/Housing.png" />
-          <BenefitLine text="health insurance:" highlightText="for you + your family" image="/benefits/Insurance.png" />
-          <BenefitLine text="chef makes" highlightText="lunch and dinner." image="/benefits/Chef.png" />
-          <BenefitLine text="off-sites: quarterly." highlightText="small team = everyone goes" image="/benefits/Offsite.png" />
-          <BenefitLine text="time off: take what you need." highlightText="don't ask permission." image="/benefits/Timeoff.png" />
-          <BenefitLine text="remote:" highlightText="needs mutual agreement." image="/benefits/Remote.png" />
+          <BenefitLine text="housing:" highlightText="we pay your rent." image="/benefits/Housing.webp" />
+          <BenefitLine text="health insurance:" highlightText="for you + your family" image="/benefits/Insurance.webp" />
+          <BenefitLine text="chef makes" highlightText="lunch and dinner." image="/benefits/Chef.webp" />
+          <BenefitLine text="off-sites: quarterly." highlightText="small team = everyone goes" image="/benefits/Offsite.webp" />
+          <BenefitLine text="time off: take what you need." highlightText="don't ask permission." image="/benefits/Timeoff.webp" />
+          <BenefitLine text="remote:" highlightText="needs mutual agreement." image="/benefits/Remote.webp" />
         </div>
 
-        <div className="mt-6 md:mt-12 px-0 max-w-4xl mx-auto">
+        <div className="mt-6 md:mt-12 px-0 max-w-7xl mx-auto">
           <div className="text-black font-[700] md:text-center text-left flex md:block">
             <span className="md:hidden mr-2 text-[clamp(1rem,4vw,1.5rem)]">•</span>
             <span className="text-[clamp(1rem,4vw,1.5rem)] md:text-[clamp(1.5rem,2.5vw,2.25rem)]">

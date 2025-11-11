@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ChevronDown } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 interface User {
   name?: string | null;
@@ -19,6 +20,8 @@ interface NavbarClientProps {
 export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -35,6 +38,13 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
     };
   }, [dropdownOpen]);
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    startTransition(() => {
+      router.push("/");
+    });
+  };
+
   const getUserDisplayName = () => {
     if (user?.name) return user.name;
     if (user?.email) return user.email.split("@")[0];
@@ -45,24 +55,41 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
     <header className="bg-[#FCFAF7] max-w-7xl mx-auto px-8 py-8 flex items-center justify-between">
       <Link 
         href="/" 
-        prefetch={true} 
+        onClick={handleLogoClick}
         className="w-60 h-12 relative cursor-pointer block"
       >
-        <Image 
-          src="/careers_logo.webp" 
-          alt="rumik.ai" 
-          fill 
-          style={{ objectFit: "contain" }} 
-          priority 
-          quality={90}
-        />
+        {isPending ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-black"></div>
+          </div>
+        ) : (
+          <Image 
+            src="/careers_logo.webp" 
+            alt="rumik.ai" 
+            fill 
+            style={{ objectFit: "contain" }} 
+            priority 
+            quality={90}
+          />
+        )}
       </Link>
 
       <nav className="hidden md:flex gap-8 text-lg font-medium absolute left-1/2 transform -translate-x-1/2">
         <Link className="hover:underline" href="/roles" prefetch={true}>
           Roles
         </Link>
-        <Link className="hover:underline" href="/#benefits" scroll={true}>
+        <Link 
+          className="hover:underline cursor-pointer" 
+          href="/#benefits"
+          onClick={(e) => {
+            const benefitsSection = document.getElementById('benefits');
+            if (benefitsSection) {
+              e.preventDefault();
+              benefitsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+            // If not on homepage, let the Link navigate normally
+          }}
+        >
           Benefits
         </Link>
         <a className="hover:underline" href="https://rumik.ai/blogs" target="_blank" rel="noopener noreferrer">
@@ -78,7 +105,7 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="inline-flex items-center gap-2 rounded-full bg-black text-[#F5E69A] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
+              className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
             >
               {getUserDisplayName()}
               <ChevronDown size={18} className={`transition-transform ${dropdownOpen ? "rotate-180" : ""}`} />
@@ -133,14 +160,14 @@ export default function NavbarClient({ user, isHydrated }: NavbarClientProps) {
                 window.location.href = `/auth/signin?callbackUrl=${encodeURIComponent(window.location.pathname)}`;
               }
             }}
-            className="inline-flex items-center gap-2 rounded-full bg-black text-[#F5E69A] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
+            className="inline-flex items-center gap-2 rounded-full bg-black text-[#fce4bd] px-6 py-3 text-base font-semibold shadow hover:bg-gray-800 transition-colors"
             aria-label="Login"
           >
             Login <ArrowRight size={18} />
           </a>
         ) : (
           // Show placeholder during SSR to match initial state
-          <div className="w-[120px] h-[48px]" />
+          <div className="w-[120px] h-12" />
         )}
       </div>
     </header>

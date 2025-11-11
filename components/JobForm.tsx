@@ -173,7 +173,7 @@ export default function JobForm({ job }: JobFormProps) {
         <Button 
           type="submit" 
           disabled={loading}
-          className="bg-black text-[#F5E69A] hover:bg-gray-800"
+          className="bg-black text-[#fce4bd] hover:bg-gray-800"
         >
           {loading ? "Saving..." : job ? "Update Job" : "Create Job"}
         </Button>

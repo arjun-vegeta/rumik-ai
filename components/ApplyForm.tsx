@@ -159,7 +159,7 @@ export default function ApplyForm({ job, session }: ApplyFormProps) {
       <Button 
         type="submit" 
         disabled={loading}
-        className="bg-black py-6 text-[#FFFFFF] hover:bg-gray-800 w-full"
+        className="bg-black py-6 text-[#fce4bd] hover:bg-gray-800 w-full"
       >
         {loading ? "Submitting..." : "Submit Application"}
       </Button>

@@ -126,7 +126,7 @@ export default function AdminJobsClient({ jobs }: AdminJobsClientProps) {
                         <Button variant="outline" size="sm">Edit</Button>
                       </Link>
                       <Link href={`/admin/jobs/${job.id}/candidates`}>
-                        <Button size="sm" className="bg-black text-[#F5E69A] hover:bg-gray-800">
+                        <Button size="sm" className="bg-black text-[#fce4bd] hover:bg-gray-800">
                           View Applicants
                         </Button>
                       </Link>

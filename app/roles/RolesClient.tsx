@@ -121,7 +121,7 @@ export default function RolesClient({ jobs }: RolesClientProps) {
                 )}
                 <div className="mt-auto">
                   <Link href={`/jobs/${job.id}`} className="cursor-pointer">
-                    <Button className="w-full py-6 bg-black text-[#FFFFFF] hover:bg-gray-800 cursor-pointer">
+                    <Button className="w-full py-6 bg-black text-[#fce4bd] hover:bg-gray-800 cursor-pointer">
                       View Details & Apply
                     </Button>
                   </Link>
