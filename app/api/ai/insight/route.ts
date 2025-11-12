@@ -1,49 +1,118 @@
 import { NextRequest, NextResponse } from "next/server"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { readFile } from "fs/promises"
-import { join } from "path"
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
-// Simple heuristic-based AI insight generator
-// Replace this with actual LLM API call (OpenAI, Anthropic, etc.)
-function generateInsight(jobJD: string, resumeText: string, skills: string[]) {
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "")
+
+// Generate AI insights using Google Gemini
+async function generateInsight(
+  jobTitle: string,
+  jobDescription: string,
+  skills: string[],
+  candidateName: string,
+  whyFit: string,
+  resumeText: string
+) {
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" })
+
+    const prompt = `You are an expert technical recruiter analyzing a job candidate.
+
+Job Position: ${jobTitle}
+
+Job Description:
+${jobDescription}
+
+Required Skills: ${skills.join(", ")}
+
+Candidate Information:
+- Name: ${candidateName}
+- Why they're interested: ${whyFit}
+- Resume/Background: ${resumeText || "Resume text not available"}
+
+Please analyze this candidate and provide:
+1. A match score from 0-100 (where 100 is a perfect match)
+2. 4-6 specific insights about their fit for this role
+
+Consider:
+- Technical skill alignment
+- Experience relevance
+- Cultural fit indicators
+- Potential concerns or gaps
+- Unique strengths
+
+Respond ONLY with valid JSON in this exact format:
+{
+  "score": <number between 0-100>,
+  "insights": [
+    "insight 1",
+    "insight 2",
+    "insight 3",
+    "insight 4"
+  ]
+}
+
+Do not include any text outside the JSON object.`
+
+    const result = await model.generateContent(prompt)
+    const response = result.response.text()
+    
+    // Extract JSON from response (handle markdown code blocks if present)
+    let jsonText = response.trim()
+    if (jsonText.startsWith("```json")) {
+      jsonText = jsonText.replace(/```json\n?/g, "").replace(/```\n?/g, "")
+    } else if (jsonText.startsWith("```")) {
+      jsonText = jsonText.replace(/```\n?/g, "")
+    }
+    
+    const parsed = JSON.parse(jsonText)
+    
+    return {
+      score: Math.max(0, Math.min(100, parsed.score)),
+      insights: parsed.insights || []
+    }
+  } catch (error) {
+    console.error("Gemini API error:", error)
+    
+    // Fallback to simple heuristic if Gemini fails
+    return generateFallbackInsight(skills, whyFit, resumeText)
+  }
+}
+
+// Fallback heuristic-based insight generator
+function generateFallbackInsight(skills: string[], whyFit: string, resumeText: string) {
   const insights: string[] = []
-  let score = 50 // Base score
+  let score = 50
 
-  // Check for skill matches
-  const resumeLower = resumeText.toLowerCase()
+  const combinedText = (whyFit + " " + resumeText).toLowerCase()
   const matchedSkills = skills.filter(skill => 
-    resumeLower.includes(skill.toLowerCase())
+    combinedText.includes(skill.toLowerCase())
   )
   
   if (matchedSkills.length > 0) {
     score += Math.min(30, matchedSkills.length * 10)
-    insights.push(`Strong match: Found ${matchedSkills.length} required skills (${matchedSkills.join(', ')})`)
+    insights.push(`Found ${matchedSkills.length} required skills: ${matchedSkills.join(', ')}`)
   } else {
-    insights.push("Limited skill match in resume")
+    insights.push("Limited skill match detected")
   }
 
-  // Check resume length (experience indicator)
-  if (resumeText.length > 2000) {
+  if (combinedText.length > 2000) {
     score += 10
-    insights.push("Extensive experience demonstrated in resume")
-  } else if (resumeText.length < 500) {
-    score -= 10
-    insights.push("Resume appears brief, may need more detail")
+    insights.push("Extensive experience demonstrated")
   }
 
-  // Check for keywords
   const keywords = ['experience', 'project', 'led', 'managed', 'developed', 'built']
-  const keywordMatches = keywords.filter(kw => resumeLower.includes(kw))
+  const keywordMatches = keywords.filter(kw => combinedText.includes(kw))
   if (keywordMatches.length >= 4) {
     score += 10
-    insights.push("Resume shows strong action-oriented language")
+    insights.push("Strong action-oriented language in application")
   }
 
-  // Ensure score is within bounds
-  score = Math.max(0, Math.min(100, score))
+  insights.push("Note: AI analysis unavailable, using basic matching")
 
-  return { score, insights }
+  return { score: Math.max(0, Math.min(100, score)), insights }
 }
 
 export async function POST(req: NextRequest) {
@@ -75,23 +144,22 @@ export async function POST(req: NextRequest) {
     // Extract resume text (in production, use PDF parser)
     let resumeText = candidate.resumeText || ""
     if (!resumeText) {
-      try {
-        const resumePath = join(process.cwd(), "public", candidate.resumeUrl)
-        resumeText = `Resume file: ${candidate.resumeUrl}. In production, parse PDF content here.`
-      } catch (err) {
-        resumeText = "Resume text not available"
-      }
+      // If resume text is not available, use the whyFit text and note about resume
+      resumeText = `Resume file available at: ${candidate.resumeUrl}. Candidate's statement: ${candidate.whyFit}`
     }
 
-    // Generate AI insights
-    const { score, insights } = generateInsight(
+    // Generate AI insights using Gemini
+    const { score, insights } = await generateInsight(
+      job.title,
       job.description,
-      resumeText + " " + candidate.whyFit,
-      job.skills
+      job.skills,
+      candidate.name,
+      candidate.whyFit,
+      resumeText
     )
 
     // Store in database
-    const aiInsight = await prisma.aIInsight.create({
+    await prisma.aIInsight.create({
       data: {
         candidateId,
         jobJD: job.description,
