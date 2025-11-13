@@ -261,10 +261,10 @@ export default function HomePage() {
           </div>
 
           <div className="flex flex-col gap-2 items-start">
-            <a href="https://rumik.ai/" className="text-lg hover:text-[#FFF4B3] transition-colors">
+            <a href="/" className="text-lg hover:text-[#FFF4B3] transition-colors">
               Home
             </a>
-            <a href="/" className="text-lg hover:text-[#FFF4B3] transition-colors">
+            <a href="/careers" className="text-lg hover:text-[#FFF4B3] transition-colors">
               Careers
             </a>
             <a href="https://rumik.ai/contact" target="_blank" rel="noopener noreferrer" className="text-lg hover:text-[#FFF4B3] transition-colors">

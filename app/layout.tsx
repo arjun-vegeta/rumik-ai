@@ -12,8 +12,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Careers @rumik.ai",
-  description: "Explore career opportunities and join our team",
+  title: "Rumik AI - Building Human AI",
+  description: "Building AI beings who can connect with humans on a personal level. Meet Ira, our first AI built for 1.3bn+ Indians.",
   icons: {
     icon: '/3d_logo.webp',
     shortcut: '/3d_logo.webp',
@@ -32,6 +32,7 @@ export default function RootLayout({
         <link rel="icon" href="/3d_logo.webp" type="image/webp" />
         <link rel="shortcut icon" href="/3d_logo.webp" type="image/webp" />
         <link rel="apple-touch-icon" href="/3d_logo.webp" />
+        <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.28/build/spline-viewer.js" async></script>
       </head>
       <body className="antialiased">
         <NavigationProgress />
