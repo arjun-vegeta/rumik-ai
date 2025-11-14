@@ -311,7 +311,7 @@ export default function NewHomePage() {
       {/* Intelligence Comparison Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16 md:py-20">
         <AnimatedSection>
-          <h2 className="text-[24px] sm:text-[28px] md:text-[36px] font-[600] leading-tight mb-3 md:mb-4 text-center">
+          <h2 className="text-[32px] md:text-[40px] font-[600] leading-tight mb-3 md:mb-4 text-center">
             Imagine AI with its own mind
           </h2>
           <h2 className="text-[24px] sm:text-[28px] md:text-[36px] font-[400] text-gray-500 leading-tight mb-12 md:mb-16 text-center">

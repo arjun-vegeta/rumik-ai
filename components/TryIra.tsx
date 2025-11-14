@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Loader2, ArrowUpRight, Expand } from "lucide-react";
+import { Send, ArrowUpRight, Expand } from "lucide-react";
 import Image from "next/image";
 
 interface Message {
@@ -153,10 +153,27 @@ export default function TryIra() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex justify-start"
+            className="flex justify-start items-center gap-2"
           >
-            <div className="bg-black text-[#E5E0CD] rounded-2xl px-4 py-3">
-              <Loader2 className="w-4 h-4 animate-spin" />
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1">
+                <motion.div
+                  className="w-1.5 h-1.5 bg-black rounded-full"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                />
+                <motion.div
+                  className="w-1.5 h-1.5 bg-black rounded-full"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                />
+                <motion.div
+                  className="w-1.5 h-1.5 bg-black rounded-full"
+                  animate={{ y: [0, -6, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.4 }}
+                />
+              </div>
+              <span className="italic text-sm text-gray-500">Ira is typing...</span>
             </div>
           </motion.div>
         )}
@@ -172,7 +189,7 @@ export default function TryIra() {
               href="https://ira.rumik.ai/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-black text-[#E5E0CD] px-6 py-3 rounded-full hover:bg-gray-800 transition-colors font-medium"
+              className="inline-flex items-center gap-2 bg-black text-[#E5E0CD] px-6 py-3 rounded-full font-medium hover:bg-[#E5E0CD] hover:text-black transition-all duration-300 border-2 border-black"
             >
               Login to Continue
               <ArrowUpRight size={18} />

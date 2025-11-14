@@ -24,7 +24,7 @@ export function ParticleTransition({ onComplete }: { onComplete: () => void }) {
     const newParticles: Particle[] = [];
     for (let i = 0; i < 360; i++) {
       const path = [];
-      const shouldConverge = i < 250; // 75% converge to top-left, 25% stay floating
+      const shouldConverge = i < 300; // 75% converge to top-left, 25% stay floating
       
       // Starting position
       const startX = Math.random() * width;
