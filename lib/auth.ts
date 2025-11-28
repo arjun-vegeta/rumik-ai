@@ -33,21 +33,34 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return true
     },
     async jwt({ token, user, account, trigger }) {
-      // On sign in or update, fetch fresh user data
-      if ((account?.provider === "google" && user?.email) || trigger === "update") {
-        const email = user?.email || token.email
-        if (email) {
-          const dbUser = await prisma.user.findUnique({
-            where: { email: email as string },
-          })
-          
-          if (dbUser) {
-            token.id = dbUser.id
-            token.role = dbUser.role
-            token.email = dbUser.email
-          }
+      // Only fetch from DB on initial sign in, not on every request
+      if (account?.provider === "google" && user?.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { id: true, role: true, email: true }
+        })
+        
+        if (dbUser) {
+          token.id = dbUser.id
+          token.role = dbUser.role
+          token.email = dbUser.email
         }
       }
+      
+      // For manual token refresh (rare)
+      if (trigger === "update" && token.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: token.email as string },
+          select: { id: true, role: true, email: true }
+        })
+        
+        if (dbUser) {
+          token.id = dbUser.id
+          token.role = dbUser.role
+          token.email = dbUser.email
+        }
+      }
+      
       return token
     },
     async session({ session, token }) {

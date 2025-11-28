@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   experimental: {
-    optimizePackageImports: ['lucide-react', 'framer-motion', 'motion'],
+    optimizePackageImports: ['lucide-react', 'framer-motion', 'motion', '@radix-ui/react-select', '@radix-ui/react-dialog'],
   },
   images: {
     qualities: [25, 50, 70, 90],
@@ -15,6 +14,8 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  // Enable static generation where possible
+  staticPageGenerationTimeout: 120,
 };
 
 export default nextConfig;

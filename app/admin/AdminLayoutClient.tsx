@@ -1,8 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import { useEffect } from "react";
 
 export default function AdminLayoutClient({
   children,
@@ -10,8 +11,15 @@ export default function AdminLayoutClient({
   children: React.ReactNode
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isJobsPage = pathname === "/admin";
   const isCandidatesPage = pathname?.startsWith("/admin/candidates");
+
+  // Prefetch admin routes on mount for instant navigation
+  useEffect(() => {
+    router.prefetch("/admin");
+    router.prefetch("/admin/candidates");
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-[#FCFAF7]">
@@ -24,6 +32,7 @@ export default function AdminLayoutClient({
             <div className="flex w-full md:w-auto border-t md:border-t-0 border-gray-200">
               <Link 
                 href="/admin"
+                prefetch={true}
                 className={`flex-1 md:flex-none px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-medium transition-colors relative text-center ${
                   isJobsPage
                     ? "text-black"
@@ -37,6 +46,7 @@ export default function AdminLayoutClient({
               </Link>
               <Link 
                 href="/admin/candidates"
+                prefetch={true}
                 className={`flex-1 md:flex-none px-4 md:px-6 py-3 md:py-4 text-sm md:text-base font-medium transition-colors relative text-center ${
                   isCandidatesPage
                     ? "text-black"
