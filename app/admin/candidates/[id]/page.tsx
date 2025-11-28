@@ -7,16 +7,38 @@ import Link from "next/link"
 import AIInsightButton from "@/components/AIInsightButton"
 import StatusUpdateButton from "@/components/StatusUpdateButton"
 
-export const dynamic = 'force-dynamic'
+// Cache for 30 seconds, revalidate in background
+export const revalidate = 30
 
 export default async function CandidateDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const candidate = await prisma.candidate.findUnique({
     where: { id },
-    include: {
-      job: true,
-      user: true,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      contact: true,
+      whyFit: true,
+      portfolio: true,
+      linkedin: true,
+      github: true,
+      resumeUrl: true,
+      status: true,
+      createdAt: true,
+      jobId: true,
+      job: {
+        select: {
+          id: true,
+          title: true,
+        }
+      },
       aiInsights: {
+        select: {
+          score: true,
+          insights: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: 'desc' },
         take: 1,
       },
@@ -57,7 +79,7 @@ export default async function CandidateDetailPage({ params }: { params: Promise<
           <CardContent className="space-y-3 md:space-y-4 px-4 md:px-6">
             <div>
               <p className="text-xs md:text-sm font-semibold text-gray-600">Email</p>
-              <p className="text-sm md:text-base break-words">{candidate.email}</p>
+              <p className="text-sm md:text-base break-all">{candidate.email}</p>
             </div>
             <div>
               <p className="text-xs md:text-sm font-semibold text-gray-600">Phone</p>

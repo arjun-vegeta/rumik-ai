@@ -4,14 +4,18 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import CandidatesClient from "./CandidatesClient"
 
-export const dynamic = 'force-dynamic'
+// Cache for 30 seconds, revalidate in background
+export const revalidate = 30
 
 export default async function JobCandidatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   
   const job = await prisma.job.findUnique({
     where: { id },
-    include: {
+    select: {
+      id: true,
+      title: true,
+      isActive: true,
       candidates: {
         where: {
           status: {
@@ -37,6 +41,7 @@ export default async function JobCandidatesPage({ params }: { params: Promise<{ 
               insights: true,
             },
             take: 1,
+            orderBy: { createdAt: 'desc' }
           },
         },
       },

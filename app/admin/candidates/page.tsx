@@ -1,7 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import AllCandidatesClient from "./AllCandidatesClient"
 
-export const dynamic = 'force-dynamic'
+// Cache for 30 seconds, revalidate in background
+export const revalidate = 30
 
 export default async function CandidatesPage() {
   const [candidates, jobs] = await Promise.all([
@@ -35,6 +36,7 @@ export default async function CandidatesPage() {
             insights: true,
           },
           take: 1,
+          orderBy: { createdAt: 'desc' }
         },
       },
     }),
