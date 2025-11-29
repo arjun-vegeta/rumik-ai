@@ -144,9 +144,6 @@ export default function KanbanBoard({ initialCandidates, jobs }: KanbanBoardProp
     );
   };
 
-  // Schedule interview handler (opens mailto) - handled directly in KanbanCard
-  const handleScheduleInterview = (_candidate: KanbanCandidate) => {};
-
   return (
     <div className="h-full flex flex-col">
       {/* Header with job filter */}
@@ -188,7 +185,6 @@ export default function KanbanBoard({ initialCandidates, jobs }: KanbanBoardProp
               color={column.color}
               showJobTitle={selectedJob === "all"}
               onAddNotes={handleAddNotes}
-              onScheduleInterview={handleScheduleInterview}
             />
           ))}
 
@@ -198,7 +194,6 @@ export default function KanbanBoard({ initialCandidates, jobs }: KanbanBoardProp
             rejectedCandidates={groupedCandidates.rejected}
             showJobTitle={selectedJob === "all"}
             onAddNotes={handleAddNotes}
-            onScheduleInterview={handleScheduleInterview}
           />
         </div>
       </DragDropContext>

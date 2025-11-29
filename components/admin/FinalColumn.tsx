@@ -9,7 +9,6 @@ interface FinalColumnProps {
   rejectedCandidates: KanbanCandidate[];
   showJobTitle: boolean;
   onAddNotes: (candidateId: string, round: string) => void;
-  onScheduleInterview: (candidate: KanbanCandidate) => void;
 }
 
 // Special column that contains both Selected (top) and Rejected (bottom) sections
@@ -18,7 +17,6 @@ export default function FinalColumn({
   rejectedCandidates,
   showJobTitle,
   onAddNotes,
-  onScheduleInterview,
 }: FinalColumnProps) {
   return (
     <div className="flex flex-col bg-gray-50 rounded-xl min-w-[260px] max-w-[280px] h-full">
@@ -56,7 +54,6 @@ export default function FinalColumn({
                   index={index}
                   showJobTitle={showJobTitle}
                   onAddNotes={onAddNotes}
-                  onScheduleInterview={onScheduleInterview}
                 />
               ))}
               {provided.placeholder}
@@ -95,7 +92,6 @@ export default function FinalColumn({
                   index={index}
                   showJobTitle={showJobTitle}
                   onAddNotes={onAddNotes}
-                  onScheduleInterview={onScheduleInterview}
                 />
               ))}
               {provided.placeholder}

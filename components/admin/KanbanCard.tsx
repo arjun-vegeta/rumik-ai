@@ -11,7 +11,6 @@ interface KanbanCardProps {
   index: number;
   showJobTitle: boolean;
   onAddNotes: (candidateId: string, round: string) => void;
-  onScheduleInterview: (candidate: KanbanCandidate) => void;
 }
 
 // Draggable card representing a candidate in the Kanban board

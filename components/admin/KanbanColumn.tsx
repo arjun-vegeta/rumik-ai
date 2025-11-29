@@ -11,7 +11,6 @@ interface KanbanColumnProps {
   color: string;
   showJobTitle: boolean;
   onAddNotes: (candidateId: string, round: string) => void;
-  onScheduleInterview: (candidate: KanbanCandidate) => void;
 }
 
 // A single column in the Kanban board that accepts draggable cards
@@ -22,7 +21,6 @@ export default function KanbanColumn({
   color,
   showJobTitle,
   onAddNotes,
-  onScheduleInterview,
 }: KanbanColumnProps) {
   return (
     <div className="flex flex-col bg-gray-50 rounded-xl min-w-[260px] max-w-[280px] h-full">
@@ -53,7 +51,6 @@ export default function KanbanColumn({
                 index={index}
                 showJobTitle={showJobTitle}
                 onAddNotes={onAddNotes}
-                onScheduleInterview={onScheduleInterview}
               />
             ))}
             {provided.placeholder}
