@@ -184,7 +184,7 @@ export default function TryIra() {
       <div className="border-t border-gray-200 p-4">
         {messages.filter(m => m.role === "user").length >= 6 ? (
           <div className="text-center py-4">
-            <p className="text-gray-600 mb-3">You've reached the message limit</p>
+            <p className="text-gray-600 mb-3">You&apos;ve reached the message limit</p>
             <a
               href="https://ira.rumik.ai/"
               target="_blank"

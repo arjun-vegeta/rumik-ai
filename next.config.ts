@@ -16,6 +16,20 @@ const nextConfig: NextConfig = {
   },
   // Enable static generation where possible
   staticPageGenerationTimeout: 120,
+  // Allow iframe embedding for specific routes
+  async headers() {
+    return [
+      {
+        source: '/embed/:path*',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors *",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

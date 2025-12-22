@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ira Chat Embed Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .embed-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        .chat-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+        }
+        .code-block {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ira Chat Widget - Embed Example</h1>
+        
+        <div class="embed-container">
+            <h2>Live Demo</h2>
+            <iframe 
+                src="/embed/ira" 
+                class="chat-iframe"
+                title="Ira Chat Widget"
+                allow="clipboard-write"
+            ></iframe>
+        </div>
+
+        <div class="code-block">
+            <h3>How to Embed on Your Website</h3>
+            <p>Copy and paste this code into your HTML:</p>
+            <pre><code>&lt;!-- Basic Embed --&gt;
+&lt;iframe 
+    src="https://rumik-ai.vercel.app/embed/ira" 
+    width="100%" 
+    height="600px"
+    style="border: none; border-radius: 8px;"
+    title="Ira Chat Widget"
+    allow="clipboard-write"
+&gt;&lt;/iframe&gt;
+
+&lt;!-- Responsive Embed --&gt;
+&lt;div style="position: relative; width: 100%; max-width: 500px; height: 600px;"&gt;
+    &lt;iframe 
+        src="https://rumik-ai.vercel.app/embed/ira" 
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
+        title="Ira Chat Widget"
+        allow="clipboard-write"
+    &gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!-- Fixed Bottom Right Corner --&gt;
+&lt;iframe 
+    src="https://rumik-ai.vercel.app/embed/ira" 
+    style="position: fixed; bottom: 20px; right: 20px; width: 400px; height: 600px; border: none; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 9999;"
+    title="Ira Chat Widget"
+    allow="clipboard-write"
+&gt;&lt;/iframe&gt;</code></pre>
+        </div>
+
+        <div class="code-block">
+            <h3>WordPress Shortcode</h3>
+            <p>Add this to your functions.php:</p>
+            <pre><code>function ira_chat_embed_shortcode() {
+    return '&lt;iframe src="https://rumik-ai.vercel.app/embed/ira" width="100%" height="600px" style="border: none; border-radius: 8px;" title="Ira Chat Widget" allow="clipboard-write"&gt;&lt;/iframe&gt;';
+}
+add_shortcode('ira_chat', 'ira_chat_embed_shortcode');
+
+// Then use [ira_chat] in your posts/pages</code></pre>
+        </div>
+
+        <div class="code-block">
+            <h3>React Component</h3>
+            <pre><code>export function IraChatEmbed() {
+  return (
+    &lt;iframe 
+      src="https://rumik-ai.vercel.app/embed/ira"
+      width="100%"
+      height="600px"
+      style={{ border: 'none', borderRadius: '8px' }}
+      title="Ira Chat Widget"
+      allow="clipboard-write"
+    /&gt;
+  );
+}</code></pre>
+        </div>
+    </div>
+</body>
+</html>
