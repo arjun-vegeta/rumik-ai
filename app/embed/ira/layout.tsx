@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import { Manrope, Young_Serif } from "next/font/google";
 import "@/app/globals.css";
 
 const manrope = Manrope({
@@ -8,6 +8,15 @@ const manrope = Manrope({
   display: "swap",
   preload: true,
   fallback: ['system-ui', 'arial'],
+  variable: '--font-manrope',
+});
+
+const youngSerif = Young_Serif({
+  subsets: ["latin"],
+  weight: ["400"],
+  display: "swap",
+  preload: true,
+  variable: '--font-young-serif',
 });
 
 export const metadata: Metadata = {
@@ -22,8 +31,8 @@ export default function EmbedLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={manrope.className}>
-      <body className="antialiased">{children}</body>
+    <html lang="en" className={`${manrope.variable} ${youngSerif.variable}`}>
+      <body className={`${manrope.className} antialiased`}>{children}</body>
     </html>
   );
 }
