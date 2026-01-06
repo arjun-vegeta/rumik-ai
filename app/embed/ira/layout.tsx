@@ -13,7 +13,7 @@ const youngSerif = Young_Serif({
   subsets: ["latin"],
   weight: ["400"],
   display: "swap",
-  variable: '--font-young-serif',
+  variable: "--font-young-serif",
 });
 
 export const metadata: Metadata = {
@@ -27,9 +27,5 @@ export default function EmbedLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <html lang="en" className={youngSerif.variable} style={{ fontFamily: manrope.style.fontFamily }}>
-      <body className="antialiased">{children}</body>
-    </html>
-  );
+  return <div className={`${youngSerif.variable} min-h-screen overflow-x-hidden`}>{children}</div>;
 }

@@ -27,14 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={manrope.className}>
+    <html lang="en" className={manrope.className} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/3d_logo.webp" type="image/webp" />
         <link rel="shortcut icon" href="/3d_logo.webp" type="image/webp" />
         <link rel="apple-touch-icon" href="/3d_logo.webp" />
         <script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.28/build/spline-viewer.js" async></script>
       </head>
-      <body className="antialiased">
+      <body className="antialiased" suppressHydrationWarning>
         <NavigationProgress />
         {children}
       </body>
