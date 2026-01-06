@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma";
 import KanbanBoard from "@/components/admin/KanbanBoard";
 
 
+// Force dynamic rendering to skip build-time DB access
+export const dynamic = "force-dynamic"
+
 // Kanban-style candidate pipeline board for recruiters
 export default async function CandidateBoardPage() {
   const session = await auth();

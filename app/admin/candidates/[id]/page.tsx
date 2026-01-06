@@ -7,8 +7,8 @@ import Link from "next/link"
 import AIInsightButton from "@/components/AIInsightButton"
 import StatusUpdateButton from "@/components/StatusUpdateButton"
 
-// Cache for 30 seconds, revalidate in background
-export const revalidate = 30
+// Force dynamic rendering to skip build-time DB access
+export const dynamic = "force-dynamic"
 
 export default async function CandidateDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

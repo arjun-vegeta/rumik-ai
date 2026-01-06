@@ -4,8 +4,8 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import CandidatesClient from "./CandidatesClient"
 
-// Cache for 30 seconds, revalidate in background
-export const revalidate = 30
+// Force dynamic rendering to skip build-time DB access
+export const dynamic = "force-dynamic"
 
 export default async function JobCandidatesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

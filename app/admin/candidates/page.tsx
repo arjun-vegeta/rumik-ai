@@ -3,8 +3,8 @@ import AllCandidatesClient from "./AllCandidatesClient"
 import Link from "next/link"
 import { LayoutGrid } from "lucide-react"
 
-// Cache for 30 seconds, revalidate in background
-export const revalidate = 30
+// Force dynamic rendering to skip build-time DB access
+export const dynamic = "force-dynamic"
 
 export default async function CandidatesPage() {
   const [candidates, jobs] = await Promise.all([
